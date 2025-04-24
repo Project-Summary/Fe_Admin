@@ -1,3 +1,36 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "next/core-web-vitals",
+    "next",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "unused-imports",
+    "jsx-a11y"
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "unused-imports/no-unused-imports": "off",
+    "simple-import-sort/imports": "off",
+    "simple-import-sort/exports": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "@next/next/no-img-element": "off",
+    "@typescript-eslint/no-unused-expressions": "off",
+    "react/jsx-key": "off",
+    "@typescript-eslint/no-unused-vars": "off", // Tắt quy tắc không sử dụng biến
+    "@typescript-eslint/no-namespace": "off", // Tắt quy tắc không sử dụng namespace
+    "react/no-unescaped-entities": "off", // Tắt quy tắc không cho phép ký tự không được thoát
+    "require-yield": "off", // Tắt quy tắc yêu cầu yield trong hàm generator
+    "no-empty": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
 }
