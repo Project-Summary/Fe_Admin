@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
@@ -28,19 +28,22 @@ import {
 } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/app/redux/store';
+import { loginThunk } from '@/app/redux/auth/thunk.auth';
 
 // Validation schema
 const formSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  email: z.string().email({ message: 'Vui lòng nhập email hợp lệ' }),
+  password: z.string().min(6, { message: 'Mật khẩu phải có ít nhất 6 ký tự' }),
   rememberMe: z.boolean().optional(),
 });
 
 export default function LoginPage() {
+  const dispatch = useDispatch<AppDispatch>();
+  const {loading} = useSelector((state: RootState) => state.auth)
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,31 +53,15 @@ export default function LoginPage() {
     },
   });
 
+  useEffect(() => {
+    router.prefetch('/dashboard');
+  }, [])
+
   async function onSubmit(values: any) {
-    setIsLoading(true);
-
-    try {
-      // In a real app, this would call your auth API
-      // For demo purposes, we'll check against the default admin credentials
-      if (values.email === 'admin@gmail.com' && values.password === '123qwe') {
-        // Simulate JWT token creation and storing
-        const token = 'demo-jwt-token-' + Date.now();
-        localStorage.setItem('admin-token', token);
-
-        // Successful login
-        toast.success('Login successful');
-
-        // Redirect to dashboard
+    await dispatch(loginThunk( {data : {email: values.email, password: values.password}, onSuccess() {
+        toast.success("Đăng nhập thành công");
         router.push('/dashboard');
-      } else {
-        toast.error('Invalid email or password');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      toast.error('Login failed. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    },}))
   }
 
   return (
@@ -86,8 +73,8 @@ export default function LoginPage() {
               <Image src="/images/admin-logo.png" alt="Logo" fill className="object-contain" />
             </div>
           </div>
-          <CardTitle className="text-2xl">Admin Dashboard</CardTitle>
-          <CardDescription>Enter your credentials to access the admin panel</CardDescription>
+          <CardTitle className="text-2xl">Bảng điều khiển quản trị</CardTitle>
+          <CardDescription>Nhập thông tin đăng nhập của bạn để truy cập vào bảng quản trị</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -110,7 +97,7 @@ export default function LoginPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Mật khẩu</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
@@ -143,25 +130,25 @@ export default function LoginPage() {
                     <FormControl>
                       <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
-                    <FormLabel className="text-sm font-normal">Remember me for 30 days</FormLabel>
+                    <FormLabel className="text-sm font-normal">Lưu mật khẩu</FormLabel>
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? (
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Signing in...
+                    Đang đăng nhập...
                   </>
                 ) : (
-                  'Sign In'
+                  'Đăng nhập'
                 )}
               </Button>
             </form>
           </Form>
         </CardContent>
         <CardFooter className="text-center text-sm text-muted-foreground">
-          <p className="w-full">Admin Access Only. Unauthorized access is prohibited.</p>
+          <p className="w-full">Chỉ dành cho quản trị viên. Nghiêm cấm truy cập trái phép.</p>
         </CardFooter>
       </Card>
     </div>

@@ -18,6 +18,12 @@ import {
   FileText,
   X,
   Clapperboard,
+  File,
+  MessageSquare,
+  MessageSquareText,
+  ChartNoAxesCombined,
+  BookAudioIcon,
+  ListCollapse,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -40,82 +46,114 @@ export default function Sidebar({
 
   const navigationItems = [
     {
-      title: 'Dashboard',
+      title: 'Bảng điều khiển',
       href: '/dashboard',
       icon: <LayoutDashboard className="h-5 w-5" />,
     },
     {
-      title: 'Movies',
+      title: 'Quản lý tóm tắt phim',
       icon: <Film className="h-5 w-5" />,
       subMenu: [
         {
-          title: 'All Movies',
+          title: 'Danh sách phim',
           href: '/movies',
           icon: <Clapperboard className="h-4 w-4" />,
         },
         {
-          title: 'Episodes',
+          title: 'Danh sách tập phim',
           href: '/movies/episodes',
           icon: <Tv className="h-4 w-4" />,
         },
         {
-          title: 'Create New',
+          title: 'Tạo tóm tắt',
           href: '/movies/new',
           icon: <FileText className="h-4 w-4" />,
         },
       ],
     },
     {
-      title: 'Stories',
+      title: 'Quản lý tóm tắt truyện',
       icon: <BookOpen className="h-5 w-5" />,
       subMenu: [
         {
-          title: 'All Stories',
+          title: 'Danh sách truyện',
           href: '/stories',
           icon: <BookOpen className="h-4 w-4" />,
         },
         {
-          title: 'Chapters',
-          href: '/stories/chapters',
-          icon: <FileText className="h-4 w-4" />,
-        },
-        {
-          title: 'Create New',
+          title: 'Tạo tóm tắt',
           href: '/stories/new',
           icon: <FileText className="h-4 w-4" />,
         },
       ],
     },
     {
-      title: 'Categories',
+      title: 'Danh mục',
       href: '/categories',
       icon: <FolderKanban className="h-5 w-5" />,
     },
     {
-      title: 'Users',
+      title: 'Kịch bản',
+      href: '/script',
+      icon: <File className="h-5 w-5" />,
+    },
+    {
+      title: 'Người dùng',
       href: '/users',
       icon: <Users className="h-5 w-5" />,
     },
     {
-      title: 'AI Content',
+      title: "Yêu cầu tóm tắt",
+      icon: <BookAudioIcon className="h-5 w-5" />,
+      subMenu: [
+        {
+          title: "Danh sách yêu cầu",
+          href: "/summary-require",
+          icon: <ListCollapse className="h-5 w-5" />
+        },
+        {
+          title: "Thống kê yêu cầu",
+          href: "/summary-require/stats",
+          icon: <ChartNoAxesCombined className="h-5 w-5" />
+        }
+      ]
+    },
+    {
+      title: 'Phản hồi',
+      icon: <MessageSquare className="h-5 w-5" />,
+      subMenu: [
+        {
+          title: "Danh sách phản hồi",
+          href: "/feedback",
+          icon: <MessageSquareText className="h-5 w-5" />
+        },
+        {
+          title: "Thống kê phản hồi",
+          href: "/feedback/stats",
+          icon: <ChartNoAxesCombined className="h-5 w-5" />
+        }
+      ]
+    },
+    {
+      title: 'AI',
       href: '/ai-content',
       icon: <Bot className="h-5 w-5" />,
     },
     {
-      title: 'API Stats',
+      title: 'Thống kê AI',
       href: '/api-stats',
       icon: <BarChart2 className="h-5 w-5" />,
-    },
-    {
-      title: 'Notifications',
-      href: '/notifications',
-      icon: <BellRing className="h-5 w-5" />,
-    },
-    {
-      title: 'Settings',
-      href: '/settings',
-      icon: <Settings className="h-5 w-5" />,
-    },
+    }
+    // {
+    //   title: 'Thông báo',
+    //   href: '/notifications',
+    //   icon: <BellRing className="h-5 w-5" />,
+    // },
+    // {
+    //   title: 'Cài đặt',
+    //   href: '/settings',
+    //   icon: <Settings className="h-5 w-5" />,
+    // },
   ];
 
   // Handle logout
@@ -151,7 +189,7 @@ export default function Sidebar({
           <div className="flex h-14 items-center border-b px-4">
             <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
               <Clapperboard className="h-6 w-6 text-primary" />
-              <span className="text-lg">Admin Panel</span>
+              <span className="text-lg">Bảng điều khiển quản trị</span>
             </Link>
             <Button variant="ghost" size="icon" className="ml-auto md:hidden" onClick={onClose}>
               <X className="h-5 w-5" />
@@ -170,7 +208,7 @@ export default function Sidebar({
         <div className="flex h-14 items-center border-b px-4">
           <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
             <Clapperboard className="h-6 w-6 text-primary" />
-            <span className="text-lg">Admin Panel</span>
+            <span className="text-lg">Bảng điều khiển quản trị</span>
           </Link>
         </div>
         <SidebarContent />
